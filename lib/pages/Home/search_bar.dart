@@ -5,8 +5,8 @@ Container searchBar() {
     margin: const EdgeInsets.only(top: 40, left: 20, right: 20),
     decoration: BoxDecoration(boxShadow: [
       BoxShadow(
-          color: Colors.black.withOpacity(0.11),
-          blurRadius: 40,
+          color: Colors.black.withOpacity(0.05),
+          blurRadius: 10,
           spreadRadius: 0.0)
     ]),
     child: TextField(

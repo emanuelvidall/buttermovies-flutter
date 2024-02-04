@@ -1,33 +1,43 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_2/pages/Home/movie_card.dart';
 
 Container trendingMovies() {
   return Container(
     margin: const EdgeInsets.only(left: 20, right: 20),
     height: 300,
-    color: Colors.red,
-    child: Column(children: [
+    child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      const Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+        Text(
+          'Trending Movies',
+          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+        ),
+        Text(
+          'See All',
+          style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 16,
+              color: Color.fromARGB(240, 148, 152, 208)),
+        )
+      ]),
       Expanded(
           child: ListView(
-        padding: const EdgeInsets.all(20),
+        scrollDirection: Axis.horizontal,
+        padding: const EdgeInsets.only(top: 20, left: 0, right: 20),
         children: <Widget>[
-          Container(
-            height: 50,
-            width: 50,
-            color: Colors.amber[600],
-            child: const Center(child: Text('Entry A')),
+          movieCard(),
+          const SizedBox(width: 30),
+          movieCard(),
+          const SizedBox(
+            width: 30,
           ),
-          Container(
-            height: 50,
-            width: 50,
-            color: Colors.amber[500],
-            child: const Center(child: Text('Entry B')),
+          movieCard(),
+          const SizedBox(
+            width: 30,
           ),
-          Container(
-            height: 50,
-            width: 50,
-            color: Colors.amber[100],
-            child: const Center(child: Text('Entry C')),
-          ),
+          movieCard(),
+          const SizedBox(
+            width: 30,
+          )
         ],
       ))
     ]),
