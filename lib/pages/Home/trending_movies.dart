@@ -1,7 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_2/pages/Home/movie_card.dart';
 
-Container trendingMovies() {
+class TrendingMovies extends StatelessWidget {
+
+  final List<dynamic> movies;
+
+  const TrendingMovies({Key? key, required this.movies})
+  
+  @override
+  Widget build(BuildContext context){
   return Container(
     margin: const EdgeInsets.only(left: 20, right: 20),
     height: 300,
@@ -42,4 +49,4 @@ Container trendingMovies() {
       ))
     ]),
   );
-}
+}}

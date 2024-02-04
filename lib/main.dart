@@ -45,19 +45,18 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
         backgroundColor: Colors.white,
         appBar: topBar(),
-        floatingActionButton: FloatingActionButton(onPressed: fetchMovies),
         body: Column(
           children: [
             searchBar(),
             const SizedBox(height: 20),
             trendingMovies(),
+            ElevatedButton(onPressed: fetchMovies, child: const Text('Test')),
           ],
         ));
   }
 
   void fetchMovies() async {
     final apiKey = dotenv.env['TMDB_API_KEY'];
-
     debugPrint('fetchMovies called');
     String url = "https://api.themoviedb.org/3/movie/popular?api_key=$apiKey";
     final uri = Uri.parse(url);
@@ -68,5 +67,6 @@ class _MyHomePageState extends State<MyHomePage> {
       movies = json['results'];
     });
     debugPrint('fetchMovies completed!');
+    debugPrint(movies.length.toString());
   }
 }
