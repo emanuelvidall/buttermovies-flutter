@@ -49,8 +49,9 @@ class _MyHomePageState extends State<MyHomePage> {
           children: [
             searchBar(),
             const SizedBox(height: 20),
-            trendingMovies(),
-            ElevatedButton(onPressed: fetchMovies, child: const Text('Test')),
+            TrendingMovies(movies: movies),
+            ElevatedButton(
+                onPressed: fetchMovies, child: const Text(' outside')),
           ],
         ));
   }
