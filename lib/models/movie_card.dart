@@ -14,8 +14,8 @@ class MovieCard {
   factory MovieCard.fromJson(Map<String, dynamic> json) {
     return MovieCard(
         title: json['title'],
-        imgUrl: json['imgUrl'],
-        rating: json['rating'].toDouble(),
-        releaseDate: json['releaseDate']);
+        imgUrl: json['poster_path'],
+        rating: json['vote_average'].toDouble(),
+        releaseDate: json['release_date']);
   }
 }

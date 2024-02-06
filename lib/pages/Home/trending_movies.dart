@@ -26,16 +26,12 @@ class TrendingMovies extends StatelessWidget {
           )
         ]),
         Expanded(
-            child: ListView(
+            child: ListView.builder(
           scrollDirection: Axis.horizontal,
-          padding: const EdgeInsets.only(top: 20, left: 0, right: 20),
-          children: movies.map((movie) {
-            return Container(
-                margin: const EdgeInsets.only(right: 11),
-                child: MovieCardWidget(
-                  movie: movie,
-                ));
-          }).toList(),
+          itemCount: movies.length,
+          itemBuilder: (context, index) {
+            return MovieCardWidget(movie: movies[index]);
+          },
         ))
       ]),
     );

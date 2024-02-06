@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_2/pages/Home/top_bar.dart';
 import 'package:flutter_application_2/pages/Home/search_bar.dart';
 import 'package:flutter_application_2/pages/Home/trending_movies.dart';
+import 'package:flutter_application_2/models/movie_card.dart';
 
 void main() async {
   await dotenv.load(fileName: ".env");
@@ -51,12 +52,12 @@ class _MyHomePageState extends State<MyHomePage> {
             const SizedBox(height: 20),
             TrendingMovies(movies: movies),
             ElevatedButton(
-                onPressed: fetchMovies, child: const Text(' outside')),
+                onPressed: fetchAndConvert, child: const Text(' outside')),
           ],
         ));
   }
 
-  void fetchMovies() async {
+  Future<List<dynamic>> fetchMovies() async {
     final apiKey = dotenv.env['TMDB_API_KEY'];
     debugPrint('fetchMovies called');
     String url = "https://api.themoviedb.org/3/movie/popular?api_key=$apiKey";
@@ -64,10 +65,22 @@ class _MyHomePageState extends State<MyHomePage> {
     final response = await http.get(uri);
     final body = response.body;
     final json = jsonDecode(body);
+    if (response.statusCode == 200) {
+      return json['results'];
+    } else {
+      throw Exception('Failed to load movies api');
+    }
+  }
+
+  Future<void> fetchAndConvert() async {
+    final jsonResponse = await fetchMovies();
+
+    List<MovieCard> movies = jsonResponse
+        .map<MovieCard>((movieMap) => MovieCard.fromJson(movieMap))
+        .toList();
     setState(() {
-      movies = json['results'];
+      this.movies = movies;
     });
-    debugPrint('fetchMovies completed!');
-    debugPrint(movies.length.toString());
+    debugPrint('state set');
   }
 }
