@@ -10,7 +10,7 @@ class TrendingMovies extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.only(left: 20, right: 20),
-      height: 300,
+      height: 340,
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         const Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
           Text(

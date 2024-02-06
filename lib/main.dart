@@ -42,6 +42,11 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   List<dynamic> movies = [];
   @override
+  void initState() {
+    super.initState();
+    fetchAndConvert();
+  }
+
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: Colors.white,
@@ -49,10 +54,11 @@ class _MyHomePageState extends State<MyHomePage> {
         body: Column(
           children: [
             searchBar(),
-            const SizedBox(height: 20),
+            const SizedBox(height: 40),
             TrendingMovies(movies: movies),
-            ElevatedButton(
-                onPressed: fetchAndConvert, child: const Text(' outside')),
+            const SizedBox(height: 40),
+            // ElevatedButton(
+            //     onPressed: fetchAndConvert, child: const Text(' outside')),
           ],
         ));
   }
@@ -60,7 +66,8 @@ class _MyHomePageState extends State<MyHomePage> {
   Future<List<dynamic>> fetchMovies() async {
     final apiKey = dotenv.env['TMDB_API_KEY'];
     debugPrint('fetchMovies called');
-    String url = "https://api.themoviedb.org/3/movie/popular?api_key=$apiKey";
+    String url =
+        "https://api.themoviedb.org/3/movie/now_playing?api_key=$apiKey";
     final uri = Uri.parse(url);
     final response = await http.get(uri);
     final body = response.body;
