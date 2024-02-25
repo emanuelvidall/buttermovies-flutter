@@ -5,7 +5,7 @@ AppBar topBar() {
     backgroundColor: Colors.white,
     toolbarHeight: 100,
     title: Container(
-      padding: const EdgeInsets.only(top: 30, left: 20, right: 20),
+      padding: const EdgeInsets.only(top: 30, left: 5, right: 20),
       child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.start,

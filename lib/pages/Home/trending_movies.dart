@@ -29,8 +29,8 @@ class TrendingMovies extends StatelessWidget {
         ]),
         Expanded(
             child: ListView.separated(
-          separatorBuilder: (context, index) => SizedBox(width: 30),
-          padding: EdgeInsets.only(top: 20, bottom: 20),
+          separatorBuilder: (context, index) => const SizedBox(width: 30),
+          padding: const EdgeInsets.only(top: 20, bottom: 20),
           scrollDirection: Axis.horizontal,
           itemCount: movies.length,
           itemBuilder: (context, index) {

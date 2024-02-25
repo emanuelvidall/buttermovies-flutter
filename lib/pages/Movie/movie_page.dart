@@ -1,15 +1,49 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_application_2/models/movie.dart';
 import 'package:flutter_application_2/pages/Home/movie_card_widget.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:http/http.dart' as http;
 
-class MoviePage extends StatelessWidget {
+class MoviePage extends StatefulWidget {
   final Movie movie;
 
   const MoviePage({Key? key, required this.movie}) : super(key: key);
 
+  @override
+  State<MoviePage> createState() => _MoviePageState();
+}
+
+Future<Map<String, dynamic>> fetchMovieDetails(String id) async {
+  final apiKey = dotenv.env['TMDB_API_KEY'];
+  debugPrint('fetchMovieDetails called');
+  String url = "https://api.themoviedb.org/3/movie/$id?api_key=$apiKey";
+  final uri = Uri.parse(url);
+  final response = await http.get(uri);
+  final body = response.body;
+  if (response.statusCode == 200) {
+    final json = jsonDecode(body);
+    return json;
+  } else {
+    throw Exception('Failed to load movies api');
+  }
+}
+
+// Future<void> fetchAndConvert() async {
+//   final jsonResponse = await fetchMovies();
+
+//   List<Movie> movies =
+//       jsonResponse.map<Movie>((movieMap) => Movie.fromJson(movieMap)).toList();
+//   setState(() {
+//     this.movies = movies;
+//   });
+//   debugPrint('state set');
+// }
+
+class _MoviePageState extends State<MoviePage> {
   final backDropSize = 'original';
-  //example: 'w342', 'w500'
   final imgUrlSize = 'w342';
 
   @override
@@ -21,7 +55,7 @@ class MoviePage extends StatelessWidget {
               decoration: BoxDecoration(
                   image: DecorationImage(
                 image: NetworkImage(
-                    'https://image.tmdb.org/t/p/$backDropSize/${movie.backdropUrl}'),
+                    'https://image.tmdb.org/t/p/$backDropSize/${widget.movie.backdropUrl}'),
                 fit: BoxFit.cover,
               )),
               child: Container(
@@ -46,7 +80,11 @@ class MoviePage extends StatelessWidget {
                       blurRadius: 15,
                       offset: const Offset(0, 0))
                 ]),
-                child: MovieCardWidget(movie: movie),
+                child: GestureDetector(
+                    onTap: () {
+                      fetchMovieDetails(widget.movie.id.toString());
+                    },
+                    child: MovieCardWidget(movie: widget.movie)),
               ),
               Container(
                 margin: const EdgeInsets.only(top: 20),
@@ -56,7 +94,7 @@ class MoviePage extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        movie.title.toString(),
+                        widget.movie.title.toString(),
                         style: GoogleFonts.roboto(
                             textStyle: const TextStyle(
                                 color: Colors.black,
@@ -66,14 +104,14 @@ class MoviePage extends StatelessWidget {
                       Row(
                         children: [
                           Container(
-                            margin: EdgeInsets.only(right: 5),
+                            margin: const EdgeInsets.only(right: 5),
                             child: Icon(
                               Icons.star,
                               color: Colors.yellow.shade800,
                             ),
                           ),
                           Text(
-                            movie.rating.toStringAsFixed(1),
+                            widget.movie.rating.toStringAsFixed(1),
                             style: const TextStyle(
                                 fontWeight: FontWeight.w700, fontSize: 16),
                           ),

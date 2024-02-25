@@ -1,4 +1,5 @@
 class Movie {
+  final int id;
   final String title;
   final String imgUrl;
   final String backdropUrl;
@@ -6,6 +7,7 @@ class Movie {
   final String releaseDate;
 
   Movie({
+    required this.id,
     required this.title,
     required this.imgUrl,
     required this.backdropUrl,
@@ -15,6 +17,7 @@ class Movie {
 
   factory Movie.fromJson(Map<String, dynamic> json) {
     return Movie(
+        id: json['id'].toInt(),
         title: json['title'],
         imgUrl: json['poster_path'],
         backdropUrl: json['backdrop_path'],
