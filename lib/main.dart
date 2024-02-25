@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter_application_2/models/movie.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
@@ -6,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_2/pages/Home/top_bar.dart';
 import 'package:flutter_application_2/pages/Home/search_bar.dart';
 import 'package:flutter_application_2/pages/Home/trending_movies.dart';
-import 'package:flutter_application_2/models/movie_card.dart';
 
 void main() async {
   await dotenv.load(fileName: ".env");
@@ -40,13 +40,14 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  List<dynamic> movies = [];
+  List<Movie> movies = [];
   @override
   void initState() {
     super.initState();
     fetchAndConvert();
   }
 
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: Colors.white,
@@ -57,8 +58,6 @@ class _MyHomePageState extends State<MyHomePage> {
             const SizedBox(height: 40),
             TrendingMovies(movies: movies),
             const SizedBox(height: 40),
-            // ElevatedButton(
-            //     onPressed: fetchAndConvert, child: const Text(' outside')),
           ],
         ));
   }
@@ -82,8 +81,8 @@ class _MyHomePageState extends State<MyHomePage> {
   Future<void> fetchAndConvert() async {
     final jsonResponse = await fetchMovies();
 
-    List<MovieCard> movies = jsonResponse
-        .map<MovieCard>((movieMap) => MovieCard.fromJson(movieMap))
+    List<Movie> movies = jsonResponse
+        .map<Movie>((movieMap) => Movie.fromJson(movieMap))
         .toList();
     setState(() {
       this.movies = movies;

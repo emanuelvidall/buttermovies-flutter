@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_2/models/movie.dart';
 import 'package:flutter_application_2/pages/Home/movie_card_widget.dart';
+import 'package:flutter_application_2/pages/Movie/movie_page.dart';
 
 class TrendingMovies extends StatelessWidget {
-  final List<dynamic> movies;
+  final List<Movie> movies;
 
   const TrendingMovies({super.key, required this.movies});
 
@@ -26,11 +28,21 @@ class TrendingMovies extends StatelessWidget {
           )
         ]),
         Expanded(
-            child: ListView.builder(
+            child: ListView.separated(
+          separatorBuilder: (context, index) => SizedBox(width: 30),
+          padding: EdgeInsets.only(top: 20, bottom: 20),
           scrollDirection: Axis.horizontal,
           itemCount: movies.length,
           itemBuilder: (context, index) {
-            return MovieCardWidget(movie: movies[index]);
+            return GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              MoviePage(movie: movies[index])));
+                },
+                child: MovieCardWidget(movie: movies[index]));
           },
         ))
       ]),

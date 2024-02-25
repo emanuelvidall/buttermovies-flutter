@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import '../../models/movie_card.dart';
+import 'package:flutter_application_2/models/movie.dart';
 
 class MovieCardWidget extends StatelessWidget {
-  final MovieCard movie;
+  final Movie movie;
 
   const MovieCardWidget({super.key, required this.movie});
   final imgSize = 'w342';
@@ -11,7 +11,6 @@ class MovieCardWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       child: Container(
-        margin: EdgeInsets.only(right: 30, top: 20, bottom: 20),
         decoration: BoxDecoration(
           image: DecorationImage(
               image: NetworkImage(
