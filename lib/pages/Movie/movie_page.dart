@@ -16,38 +16,42 @@ class MoviePage extends StatefulWidget {
   State<MoviePage> createState() => _MoviePageState();
 }
 
-Future<Map<String, dynamic>> fetchMovieDetails(String id) async {
-  final apiKey = dotenv.env['TMDB_API_KEY'];
-  debugPrint('fetchMovieDetails called');
-  String url = "https://api.themoviedb.org/3/movie/$id?api_key=$apiKey";
-  final uri = Uri.parse(url);
-  final response = await http.get(uri);
-  final body = response.body;
-  if (response.statusCode == 200) {
-    final json = jsonDecode(body);
-    return json;
-  } else {
-    throw Exception('Failed to load movies api');
-  }
-}
-
-// Future<void> fetchAndConvert() async {
-//   final jsonResponse = await fetchMovies();
-
-//   List<Movie> movies =
-//       jsonResponse.map<Movie>((movieMap) => Movie.fromJson(movieMap)).toList();
-//   setState(() {
-//     this.movies = movies;
-//   });
-//   debugPrint('state set');
-// }
-
 class _MoviePageState extends State<MoviePage> {
+  Map<String, dynamic>? movieDetails;
+  @override
+  void initState() {
+    super.initState();
+    debugPrint('Movies id is: ${widget.movie.id.toString()}');
+    _loadMovieDetails(widget.movie.id.toString());
+  }
+
+  Future<Map<String, dynamic>> _loadMovieDetails(String id) async {
+    final apiKey = dotenv.env['TMDB_API_KEY'];
+    debugPrint('fetchMovieDetails called on mount');
+    String url = "https://api.themoviedb.org/3/movie/$id?api_key=$apiKey";
+    final uri = Uri.parse(url);
+    final response = await http.get(uri);
+    final body = response.body;
+    if (response.statusCode == 200) {
+      final json = jsonDecode(body);
+      debugPrint(json['overview'].toString());
+      debugPrint('debug printado');
+      setState(() {
+        movieDetails = json;
+      });
+      return json;
+    } else {
+      throw Exception('Failed to load movies api');
+    }
+  }
+
   final backDropSize = 'original';
   final imgUrlSize = 'w342';
 
   @override
   Widget build(BuildContext context) {
+    String overviewText = movieDetails?['overview'] ?? 'No overview available';
+
     return Material(
       child: Stack(
         children: [
@@ -82,7 +86,7 @@ class _MoviePageState extends State<MoviePage> {
                 ]),
                 child: GestureDetector(
                     onTap: () {
-                      fetchMovieDetails(widget.movie.id.toString());
+                      _loadMovieDetails(widget.movie.id.toString());
                     },
                     child: MovieCardWidget(movie: widget.movie)),
               ),
@@ -119,6 +123,28 @@ class _MoviePageState extends State<MoviePage> {
                       )
                     ],
                   ),
+                ),
+              ),
+              Container(
+                padding: const EdgeInsets.only(left: 30, right: 20),
+                child: Column(
+                  children: [
+                    const SizedBox(height: 20),
+                    Container(
+                      alignment: Alignment.centerLeft,
+                      child: Text('Prolog',
+                          style: GoogleFonts.roboto(
+                              textStyle: const TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w900))),
+                    ),
+                    Text(
+                      overviewText,
+                      style: const TextStyle(
+                          fontWeight: FontWeight.w400, color: Colors.black),
+                    ),
+                  ],
                 ),
               )
             ]),
