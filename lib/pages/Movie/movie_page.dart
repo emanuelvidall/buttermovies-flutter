@@ -1,7 +1,9 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_application_2/models/cast.dart';
 import 'package:flutter_application_2/models/movie.dart';
+import 'package:flutter_application_2/pages/Home/cast_card_widget.dart';
 import 'package:flutter_application_2/pages/Home/movie_card_widget.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -19,6 +21,7 @@ class MoviePage extends StatefulWidget {
 class _MoviePageState extends State<MoviePage> {
   Map<String, dynamic>? movieDetails;
   Map<String, dynamic>? movieCredits;
+  Cast? cast;
   String? movieDirector = '';
   @override
   void initState() {
@@ -78,6 +81,17 @@ class _MoviePageState extends State<MoviePage> {
       return json;
     } else {
       throw Exception('Failed to load movie credits');
+    }
+  }
+
+  void fetchMovieCredits() async {
+    Map<String, dynamic> movieCredits =
+        await _loadMovieCredits(widget.movie.id.toString());
+    if (movieCredits.containsKey('crew')) {
+      List<dynamic> castJson = movieCredits['crew'];
+      setState(() {
+        cast = Cast.fromJson(castJson as Map<String, dynamic>);
+      });
     }
   }
 
@@ -204,6 +218,16 @@ class _MoviePageState extends State<MoviePage> {
                       style: const TextStyle(
                           fontWeight: FontWeight.w400, color: Colors.black),
                     ),
+                    Expanded(
+                        child: ListView.separated(
+                      separatorBuilder: (context, index) =>
+                          const SizedBox(width: 20),
+                      scrollDirection: Axis.horizontal,
+                      itemCount: 5,
+                      itemBuilder: (context, index) {
+                        CastCardWdiget(cast: cast!);
+                      },
+                    ))
                   ],
                 ),
               )
