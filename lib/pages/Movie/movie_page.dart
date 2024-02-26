@@ -18,11 +18,14 @@ class MoviePage extends StatefulWidget {
 
 class _MoviePageState extends State<MoviePage> {
   Map<String, dynamic>? movieDetails;
+  Map<String, dynamic>? movieCredits;
+  String? movieDirector = '';
   @override
   void initState() {
     super.initState();
     debugPrint('Movies id is: ${widget.movie.id.toString()}');
     _loadMovieDetails(widget.movie.id.toString());
+    _loadMovieCredits(widget.movie.id.toString());
   }
 
   Future<Map<String, dynamic>> _loadMovieDetails(String id) async {
@@ -34,8 +37,6 @@ class _MoviePageState extends State<MoviePage> {
     final body = response.body;
     if (response.statusCode == 200) {
       final json = jsonDecode(body);
-      debugPrint(json['overview'].toString());
-      debugPrint('debug printado');
       setState(() {
         movieDetails = json;
       });
@@ -45,12 +46,61 @@ class _MoviePageState extends State<MoviePage> {
     }
   }
 
+  Future<Map<String, dynamic>> _loadMovieCredits(String id) async {
+    final apiKey = dotenv.env['TMDB_API_KEY'];
+    debugPrint('_loadMovieCredits called on mount');
+    String url =
+        'https://api.themoviedb.org/3/movie/$id/credits?api_key=$apiKey';
+    final uri = Uri.parse(url);
+    final response = await http.get(uri);
+    final body = response.body;
+    if (response.statusCode == 200) {
+      final json = jsonDecode(body);
+      setState(() {
+        movieCredits = json;
+      });
+
+      final List<dynamic> crew = json['crew'];
+      String? directorName;
+      for (var member in crew) {
+        if (member['job'] == 'Director') {
+          directorName = member['name'];
+          break;
+        }
+      }
+
+      if (directorName != null) {
+        setState(() {
+          movieDirector = directorName;
+        });
+      }
+
+      return json;
+    } else {
+      throw Exception('Failed to load movie credits');
+    }
+  }
+
   final backDropSize = 'original';
   final imgUrlSize = 'w342';
 
   @override
   Widget build(BuildContext context) {
     String overviewText = movieDetails?['overview'] ?? 'No overview available';
+    String runtimeHours;
+    String runtimeMinutes;
+    if (movieDetails?['runtime'] != null) {
+      int hours = (movieDetails?['runtime'] / 60).floor();
+      runtimeHours = hours.toString();
+    } else {
+      runtimeHours = ' ';
+    }
+    if (movieDetails?['runtime'] != null) {
+      int minutes = (movieDetails?['runtime'] % 60).floor();
+      runtimeMinutes = minutes.toString();
+    } else {
+      runtimeMinutes = ' ';
+    }
 
     return Material(
       child: Stack(
@@ -129,6 +179,16 @@ class _MoviePageState extends State<MoviePage> {
                 padding: const EdgeInsets.only(left: 30, right: 20),
                 child: Column(
                   children: [
+                    const SizedBox(height: 20),
+                    Row(children: [
+                      Text(runtimeHours +
+                          'hr ' +
+                          runtimeMinutes +
+                          'min' +
+                          "| " +
+                          "Director: " +
+                          movieDirector.toString())
+                    ]),
                     const SizedBox(height: 20),
                     Container(
                       alignment: Alignment.centerLeft,
