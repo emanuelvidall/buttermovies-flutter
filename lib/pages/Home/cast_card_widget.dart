@@ -1,21 +1,24 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_2/models/cast.dart';
 
-class CastCardWdiget extends StatelessWidget {
-  final Cast cast;
-
-  const CastCardWdiget({super.key, required this.cast});
-
+class CastCardWidget extends StatelessWidget {
+  final Map<String, dynamic> cast;
   final imgSize = 'w342';
+
+  const CastCardWidget({Key? key, required this.cast}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    var profilePath = cast['profile_path'] ?? '';
+    var imageUrl = profilePath.isNotEmpty
+        ? "https://image.tmdb.org/t/p/$imgSize/$profilePath"
+        : "https://placehold.it/60x60";
+
     return GestureDetector(
       child: Container(
         decoration: BoxDecoration(
           image: DecorationImage(
-              image: NetworkImage(
-                  "https://image.tmdb.org/t/p/$imgSize/${cast.avatarUrl}"),
+              image:
+                  NetworkImage("https://image.tmdb.org/t/p/$imgSize/$imageUrl"),
               fit: BoxFit.cover),
           borderRadius: BorderRadius.circular(100),
         ),

@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_application_2/models/cast.dart';
 import 'package:flutter_application_2/models/movie.dart';
 import 'package:flutter_application_2/pages/Home/cast_card_widget.dart';
 import 'package:flutter_application_2/pages/Home/movie_card_widget.dart';
@@ -11,7 +10,6 @@ import 'package:http/http.dart' as http;
 
 class MoviePage extends StatefulWidget {
   final Movie movie;
-
   const MoviePage({Key? key, required this.movie}) : super(key: key);
 
   @override
@@ -19,16 +17,17 @@ class MoviePage extends StatefulWidget {
 }
 
 class _MoviePageState extends State<MoviePage> {
+  List<Map<String, dynamic>> atores = [];
   Map<String, dynamic>? movieDetails;
   Map<String, dynamic>? movieCredits;
-  Cast? cast;
   String? movieDirector = '';
+  Future<List<Map<String, dynamic>>>? _movieCreditsFuture;
+
   @override
   void initState() {
     super.initState();
-    debugPrint('Movies id is: ${widget.movie.id.toString()}');
     _loadMovieDetails(widget.movie.id.toString());
-    _loadMovieCredits(widget.movie.id.toString());
+    _movieCreditsFuture = _loadMovieCredits(widget.movie.id.toString());
   }
 
   Future<Map<String, dynamic>> _loadMovieDetails(String id) async {
@@ -49,7 +48,7 @@ class _MoviePageState extends State<MoviePage> {
     }
   }
 
-  Future<Map<String, dynamic>> _loadMovieCredits(String id) async {
+  Future<List<Map<String, dynamic>>> _loadMovieCredits(String id) async {
     final apiKey = dotenv.env['TMDB_API_KEY'];
     debugPrint('_loadMovieCredits called on mount');
     String url =
@@ -59,39 +58,39 @@ class _MoviePageState extends State<MoviePage> {
     final body = response.body;
     if (response.statusCode == 200) {
       final json = jsonDecode(body);
-      setState(() {
-        movieCredits = json;
-      });
 
       final List<dynamic> crew = json['crew'];
       String? directorName;
       for (var member in crew) {
         if (member['job'] == 'Director') {
           directorName = member['name'];
-          break;
         }
       }
+
+      final List<Map<String, dynamic>> filteredActors = [];
+      final List<dynamic> actors = json['cast'];
+      for (var member in actors) {
+        if (filteredActors.length >= 5) {
+          break;
+        }
+        if (member['known_for_department'] == 'Acting') {
+          filteredActors.add(
+              {'name': member['name'], 'profile_path': member['profile_path']});
+        }
+      }
+
+      setState(() {
+        atores = filteredActors;
+      });
 
       if (directorName != null) {
         setState(() {
           movieDirector = directorName;
         });
       }
-
-      return json;
+      return filteredActors;
     } else {
       throw Exception('Failed to load movie credits');
-    }
-  }
-
-  void fetchMovieCredits() async {
-    Map<String, dynamic> movieCredits =
-        await _loadMovieCredits(widget.movie.id.toString());
-    if (movieCredits.containsKey('crew')) {
-      List<dynamic> castJson = movieCredits['crew'];
-      setState(() {
-        cast = Cast.fromJson(castJson as Map<String, dynamic>);
-      });
     }
   }
 
@@ -218,16 +217,27 @@ class _MoviePageState extends State<MoviePage> {
                       style: const TextStyle(
                           fontWeight: FontWeight.w400, color: Colors.black),
                     ),
-                    Expanded(
-                        child: ListView.separated(
-                      separatorBuilder: (context, index) =>
-                          const SizedBox(width: 20),
-                      scrollDirection: Axis.horizontal,
-                      itemCount: 5,
-                      itemBuilder: (context, index) {
-                        CastCardWdiget(cast: cast!);
+                    FutureBuilder<List<Map<String, dynamic>>>(
+                      future: _movieCreditsFuture,
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return CircularProgressIndicator(); // Show loading indicator
+                        } else if (snapshot.hasError) {
+                          return Text('Error: ${snapshot.error}');
+                        } else {
+                          // Data is loaded:
+                          var castList = snapshot.data ??
+                              []; // Fallback to empty list if null
+                          return ListView.builder(
+                            itemCount: castList.length,
+                            itemBuilder: (context, index) {
+                              return CastCardWidget(cast: castList[index]);
+                            },
+                          );
+                        }
                       },
-                    ))
+                    )
                   ],
                 ),
               )
