@@ -17,7 +17,6 @@ class MoviePage extends StatefulWidget {
 }
 
 class _MoviePageState extends State<MoviePage> {
-  List<Map<String, dynamic>> atores = [];
   Map<String, dynamic>? movieDetails;
   Map<String, dynamic>? movieCredits;
   String? movieDirector = '';
@@ -79,15 +78,12 @@ class _MoviePageState extends State<MoviePage> {
         }
       }
 
-      setState(() {
-        atores = filteredActors;
-      });
-
       if (directorName != null) {
         setState(() {
           movieDirector = directorName;
         });
       }
+      debugPrint(filteredActors.toString());
       return filteredActors;
     } else {
       throw Exception('Failed to load movie credits');
@@ -217,6 +213,9 @@ class _MoviePageState extends State<MoviePage> {
                       style: const TextStyle(
                           fontWeight: FontWeight.w400, color: Colors.black),
                     ),
+                    SizedBox(
+                      height: 20,
+                    ),
                     FutureBuilder<List<Map<String, dynamic>>>(
                       future: _movieCreditsFuture,
                       builder: (context, snapshot) {
@@ -226,14 +225,21 @@ class _MoviePageState extends State<MoviePage> {
                         } else if (snapshot.hasError) {
                           return Text('Error: ${snapshot.error}');
                         } else {
-                          // Data is loaded:
                           var castList = snapshot.data ??
                               []; // Fallback to empty list if null
-                          return ListView.builder(
-                            itemCount: castList.length,
-                            itemBuilder: (context, index) {
-                              return CastCardWidget(cast: castList[index]);
-                            },
+                          return SizedBox(
+                            height:
+                                90, // Adjust based on your CastCardWidget's height
+                            child: ListView.separated(
+                              scrollDirection: Axis.horizontal,
+                              itemCount: castList.length,
+                              itemBuilder: (context, index) {
+                                return CastCardWidget(cast: castList[index]);
+                              },
+                              separatorBuilder: (context, index) =>
+                                  const SizedBox(
+                                      width: 20), // Spacing between items
+                            ),
                           );
                         }
                       },
