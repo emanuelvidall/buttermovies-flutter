@@ -126,11 +126,24 @@ class _MoviePageState extends State<MoviePage> {
                 gradient: LinearGradient(colors: [
                   Colors.white.withOpacity(0.1),
                   Colors.white.withOpacity(0.8),
-                ], stops: [
+                ], stops: const [
                   0.1,
                   0.5
                 ], begin: Alignment.topRight, end: Alignment.bottomRight),
               ))),
+          Positioned(
+            top: 40,
+            left: 20,
+            child: IconButton(
+              icon: const Icon(
+                Icons.arrow_back_ios,
+                color: Colors.white,
+              ),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+          ),
           Container(
             padding: const EdgeInsets.only(top: 40),
             alignment: Alignment.center,
@@ -213,7 +226,7 @@ class _MoviePageState extends State<MoviePage> {
                       style: const TextStyle(
                           fontWeight: FontWeight.w400, color: Colors.black),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 20,
                     ),
                     FutureBuilder<List<Map<String, dynamic>>>(
@@ -221,7 +234,7 @@ class _MoviePageState extends State<MoviePage> {
                       builder: (context, snapshot) {
                         if (snapshot.connectionState ==
                             ConnectionState.waiting) {
-                          return CircularProgressIndicator(); // Show loading indicator
+                          return const CircularProgressIndicator(); // Show loading indicator
                         } else if (snapshot.hasError) {
                           return Text('Error: ${snapshot.error}');
                         } else {

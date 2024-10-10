@@ -24,10 +24,10 @@ class CastCardWidget extends StatelessWidget {
           width: 60,
           height: 60,
         ),
-        SizedBox(height: 10),
+        const SizedBox(height: 10),
         Text(
           actorName,
-          style: TextStyle(fontWeight: FontWeight.w600),
+          style: const TextStyle(fontWeight: FontWeight.w600),
         )
       ],
     );

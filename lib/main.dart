@@ -87,6 +87,7 @@ class _MyHomePageState extends State<MyHomePage> {
     setState(() {
       this.movies = movies;
     });
+    debugPrint(movies.length.toString());
     debugPrint('state set');
   }
 }
