@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_2/widgets/login_form_widget.dart';
 import 'package:flutter_application_2/widgets/login_top_bar.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -11,17 +12,20 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   @override
   void initState() {
-    super.initState()
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: loginTopBar(),
+      backgroundColor: (Colors.white),
       body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          // loginForm()
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [LoginFormWidget()],
+          )
         ],
       ),
     );

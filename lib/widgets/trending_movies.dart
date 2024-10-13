@@ -3,10 +3,10 @@ import 'package:flutter_application_2/models/movie_model.dart';
 import 'package:flutter_application_2/widgets/movie_card_widget.dart';
 import 'package:flutter_application_2/screens/movie_detail_screen.dart';
 
-class TrendingMovies extends StatelessWidget {
+class TrendingMoviesWidget extends StatelessWidget {
   final List<Movie> movies;
 
-  const TrendingMovies({super.key, required this.movies});
+  const TrendingMoviesWidget({super.key, required this.movies});
 
   @override
   Widget build(BuildContext context) {

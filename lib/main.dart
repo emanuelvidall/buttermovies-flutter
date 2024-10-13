@@ -1,5 +1,5 @@
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import './screens/home_screen.dart';
+import './screens/login_screen.dart';
 import 'package:flutter/material.dart';
 
 void main() async {
@@ -19,9 +19,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.white),
         useMaterial3: true,
       ),
-      home: HomeScreen(
-        title: '35mm',
-      ),
+      home: LoginScreen(),
     );
   }
 }
