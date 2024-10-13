@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_2/models/movie.dart';
-import 'package:flutter_application_2/pages/Home/movie_card_widget.dart';
-import 'package:flutter_application_2/pages/Movie/movie_page.dart';
+import 'package:flutter_application_2/models/movie_model.dart';
+import 'package:flutter_application_2/widgets/movie_card_widget.dart';
+import 'package:flutter_application_2/screens/movie_page.dart';
 
 class TrendingMovies extends StatelessWidget {
   final List<Movie> movies;

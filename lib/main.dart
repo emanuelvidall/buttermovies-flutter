@@ -1,12 +1,12 @@
 import 'dart:convert';
-import 'package:flutter_application_2/models/movie.dart';
+import 'package:flutter_application_2/models/movie_model.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_application_2/pages/Home/top_bar.dart';
-import 'package:flutter_application_2/pages/Home/search_bar.dart';
-import 'package:flutter_application_2/pages/Home/trending_movies.dart';
+import 'package:flutter_application_2/widgets/top_bar.dart';
+import 'package:flutter_application_2/widgets/search_bar.dart';
+import 'package:flutter_application_2/widgets/trending_movies.dart';
 
 void main() async {
   await dotenv.load(fileName: ".env");

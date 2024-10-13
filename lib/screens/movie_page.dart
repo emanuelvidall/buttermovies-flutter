@@ -1,9 +1,9 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_application_2/models/movie.dart';
-import 'package:flutter_application_2/pages/Home/cast_card_widget.dart';
-import 'package:flutter_application_2/pages/Home/movie_card_widget.dart';
+import 'package:flutter_application_2/models/movie_model.dart';
+import 'package:flutter_application_2/widgets/cast_card_widget.dart';
+import 'package:flutter_application_2/widgets/movie_card_widget.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
