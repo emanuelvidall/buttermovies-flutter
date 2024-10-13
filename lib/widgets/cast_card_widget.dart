@@ -4,7 +4,7 @@ class CastCardWidget extends StatelessWidget {
   final Map<String, dynamic> cast;
   final imgSize = 'w342';
 
-  const CastCardWidget({Key? key, required this.cast}) : super(key: key);
+  const CastCardWidget({super.key, required this.cast});
 
   @override
   Widget build(BuildContext context) {

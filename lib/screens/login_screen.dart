@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_2/widgets/login_form_widget.dart';
-import 'package:flutter_application_2/widgets/login_top_bar.dart';
+import 'package:flutter_application_2/widgets/login_welcome_widget.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -24,7 +24,7 @@ class _LoginScreenState extends State<LoginScreen> {
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: [LoginFormWidget()],
+            children: [LoginWelcomeWidget()],
           )
         ],
       ),

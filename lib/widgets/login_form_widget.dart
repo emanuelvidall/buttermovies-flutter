@@ -28,10 +28,33 @@ class LoginFormWidget extends StatelessWidget {
       ),
       width: screenWidth * 0.8,
       height: screenHeight * 0.5,
-      child: Container(
-        child: TextField(
-          decoration: InputDecoration(),
-        ),
+      child: Column(
+        mainAxisAlignment:
+            MainAxisAlignment.center, // Center the content vertically
+        children: [
+          TextField(
+            decoration: InputDecoration(
+              hintText: 'Username', // Placeholder text for the username field
+              filled: true,
+              fillColor: Colors.white,
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
+          ),
+          SizedBox(height: 16), // Adds spacing between the two text fields
+          TextField(
+            obscureText: true, // For password input (hides the text)
+            decoration: InputDecoration(
+              hintText: 'Password', // Placeholder text for the password field
+              filled: true,
+              fillColor: Colors.white,
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

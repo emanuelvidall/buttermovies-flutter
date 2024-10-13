@@ -10,7 +10,7 @@ import 'package:http/http.dart' as http;
 
 class MoviePage extends StatefulWidget {
   final Movie movie;
-  const MoviePage({Key? key, required this.movie}) : super(key: key);
+  const MoviePage({super.key, required this.movie});
 
   @override
   State<MoviePage> createState() => _MoviePageState();
