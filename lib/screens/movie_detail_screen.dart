@@ -1,12 +1,9 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_application_2/models/movie_model.dart';
 import 'package:flutter_application_2/widgets/cast_card_widget.dart';
 import 'package:flutter_application_2/widgets/movie_card_widget.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:http/http.dart' as http;
+import 'package:flutter_application_2/services/movie_service.dart';
 
 class MoviePage extends StatefulWidget {
   final Movie movie;
@@ -20,73 +17,31 @@ class _MoviePageState extends State<MoviePage> {
   Map<String, dynamic>? movieDetails;
   Map<String, dynamic>? movieCredits;
   String? movieDirector = '';
-  Future<List<Map<String, dynamic>>>? _movieCreditsFuture;
+  final MovieService _movieService = MovieService();
+  Future<Map<String, dynamic>>? _movieCreditsFuture;
 
   @override
   void initState() {
     super.initState();
-    _loadMovieDetails(widget.movie.id.toString());
-    _movieCreditsFuture = _loadMovieCredits(widget.movie.id.toString());
+    _movieCreditsFuture =
+        _movieService.loadMovieCredits(widget.movie.id.toString());
+
+    _fetchMovieDetailsAndCredits();
   }
 
-  Future<Map<String, dynamic>> _loadMovieDetails(String id) async {
-    final apiKey = dotenv.env['TMDB_API_KEY'];
-    debugPrint('fetchMovieDetails called on mount');
-    String url = "https://api.themoviedb.org/3/movie/$id?api_key=$apiKey";
-    final uri = Uri.parse(url);
-    final response = await http.get(uri);
-    final body = response.body;
-    if (response.statusCode == 200) {
-      final json = jsonDecode(body);
+  Future<void> _fetchMovieDetailsAndCredits() async {
+    try {
+      final details =
+          await _movieService.loadMovieDetails(widget.movie.id.toString());
+      final credits =
+          await _movieService.loadMovieCredits(widget.movie.id.toString());
       setState(() {
-        movieDetails = json;
+        movieDetails = details;
+        movieDirector = credits['director'];
+        // movieCredits = credits;
       });
-      return json;
-    } else {
-      throw Exception('Failed to load movies api');
-    }
-  }
-
-  Future<List<Map<String, dynamic>>> _loadMovieCredits(String id) async {
-    final apiKey = dotenv.env['TMDB_API_KEY'];
-    debugPrint('_loadMovieCredits called on mount');
-    String url =
-        'https://api.themoviedb.org/3/movie/$id/credits?api_key=$apiKey';
-    final uri = Uri.parse(url);
-    final response = await http.get(uri);
-    final body = response.body;
-    if (response.statusCode == 200) {
-      final json = jsonDecode(body);
-
-      final List<dynamic> crew = json['crew'];
-      String? directorName;
-      for (var member in crew) {
-        if (member['job'] == 'Director') {
-          directorName = member['name'];
-        }
-      }
-
-      final List<Map<String, dynamic>> filteredActors = [];
-      final List<dynamic> actors = json['cast'];
-      for (var member in actors) {
-        if (filteredActors.length >= 5) {
-          break;
-        }
-        if (member['known_for_department'] == 'Acting') {
-          filteredActors.add(
-              {'name': member['name'], 'profile_path': member['profile_path']});
-        }
-      }
-
-      if (directorName != null) {
-        setState(() {
-          movieDirector = directorName;
-        });
-      }
-      debugPrint(filteredActors.toString());
-      return filteredActors;
-    } else {
-      throw Exception('Failed to load movie credits');
+    } catch (e) {
+      debugPrint('Error fetching movie details: $e');
     }
   }
 
@@ -158,7 +113,8 @@ class _MoviePageState extends State<MoviePage> {
                 ]),
                 child: GestureDetector(
                     onTap: () {
-                      _loadMovieDetails(widget.movie.id.toString());
+                      _movieService
+                          .loadMovieDetails(widget.movie.id.toString());
                     },
                     child: MovieCardWidget(movie: widget.movie)),
               ),
@@ -229,20 +185,18 @@ class _MoviePageState extends State<MoviePage> {
                     const SizedBox(
                       height: 20,
                     ),
-                    FutureBuilder<List<Map<String, dynamic>>>(
+                    FutureBuilder<Map<String, dynamic>>(
                       future: _movieCreditsFuture,
                       builder: (context, snapshot) {
                         if (snapshot.connectionState ==
                             ConnectionState.waiting) {
-                          return const CircularProgressIndicator(); // Show loading indicator
+                          return const CircularProgressIndicator();
                         } else if (snapshot.hasError) {
                           return Text('Error: ${snapshot.error}');
                         } else {
-                          var castList = snapshot.data ??
-                              []; // Fallback to empty list if null
+                          var castList = snapshot.data?['actors'] ?? [];
                           return SizedBox(
-                            height:
-                                90, // Adjust based on your CastCardWidget's height
+                            height: 90,
                             child: ListView.separated(
                               scrollDirection: Axis.horizontal,
                               itemCount: castList.length,
@@ -250,8 +204,7 @@ class _MoviePageState extends State<MoviePage> {
                                 return CastCardWidget(cast: castList[index]);
                               },
                               separatorBuilder: (context, index) =>
-                                  const SizedBox(
-                                      width: 20), // Spacing between items
+                                  const SizedBox(width: 20),
                             ),
                           );
                         }

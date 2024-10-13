@@ -1,3 +1,4 @@
+import 'package:flutter_application_2/screens/home_screen.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import './screens/login_screen.dart';
 import 'package:flutter/material.dart';
@@ -19,7 +20,9 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.white),
         useMaterial3: true,
       ),
-      home: LoginScreen(),
+      home: HomeScreen(
+        title: '35mm',
+      ),
     );
   }
 }
