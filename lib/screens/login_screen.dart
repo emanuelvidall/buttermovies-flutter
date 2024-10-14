@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_application_2/services/auth_service.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -22,6 +23,8 @@ class _LoginScreenState extends State<LoginScreen> {
       debugPrint('Login failed $e');
     }
   }
+
+  bool _obscureText = true;
 
   @override
   Widget build(BuildContext context) {
@@ -60,8 +63,90 @@ class _LoginScreenState extends State<LoginScreen> {
                       style: TextStyle(fontSize: 26),
                       textAlign: TextAlign.left,
                     ),
+                    SizedBox(
+                      height: 48,
+                    )
                   ],
-                ))
+                )),
+            Text(
+              'Username or Email',
+              style: TextStyle(fontWeight: FontWeight.w500),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            TextField(
+                controller: _usernameController,
+                decoration: InputDecoration(
+                    labelText: 'Enter Username or Email',
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(14)),
+                    hintStyle: TextStyle(
+                      color: Colors.grey.withOpacity(
+                          0.5), // Set the opacity of the hint text to 50%
+                      fontSize: 16.0,
+                    ))),
+            SizedBox(
+              height: 20,
+            ),
+            Text(
+              'Password',
+              style: TextStyle(fontWeight: FontWeight.w500),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Container(
+              margin: EdgeInsets.only(bottom: 24),
+              child: TextField(
+                  obscureText: _obscureText,
+                  controller: _passwordController,
+                  decoration: InputDecoration(
+                      suffixIcon: IconButton(
+                        icon: Icon(_obscureText
+                            ? Icons.visibility
+                            : Icons.visibility_off),
+                        onPressed: () {
+                          setState(() {
+                            _obscureText = !_obscureText;
+                          });
+                        },
+                      ),
+                      labelText: 'Enter Password',
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(14)),
+                      hintStyle: TextStyle(
+                        color: Colors.grey.withOpacity(
+                            0.5), // Set the opacity of the hint text to 50%
+                        fontSize: 16.0,
+                      ))),
+            ),
+            Row(
+              children: [
+                Expanded(
+                  child: Container(
+                    margin: EdgeInsets.only(right: 10),
+                    child: Divider(
+                      color: Colors.black.withOpacity(0.25),
+                      thickness: 1,
+                    ),
+                  ),
+                ),
+                Text(
+                  'or',
+                  style: TextStyle(color: Colors.black.withOpacity(0.25)),
+                ),
+                Expanded(
+                  child: Container(
+                    margin: EdgeInsets.only(left: 10),
+                    child: Divider(
+                      color: Colors.black.withOpacity(0.25),
+                      thickness: 1,
+                    ),
+                  ),
+                ),
+              ],
+            )
           ],
         ),
       ),
