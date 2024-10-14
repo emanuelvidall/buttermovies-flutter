@@ -38,7 +38,6 @@ class _MoviePageState extends State<MoviePage> {
       setState(() {
         movieDetails = details;
         movieDirector = credits['director'];
-        // movieCredits = credits;
       });
     } catch (e) {
       debugPrint('Error fetching movie details: $e');

@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_2/screens/login_screen.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-class LoginWelcomeWidget extends StatelessWidget {
-  const LoginWelcomeWidget({super.key});
+class WelcomeWidget extends StatelessWidget {
+  const WelcomeWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -46,9 +47,7 @@ class LoginWelcomeWidget extends StatelessWidget {
               )
             ],
           ),
-        )
-        // Action to perform when the button is pressed
-        ,
+        ),
         Container(
           margin: EdgeInsets.only(top: 20),
           child: Column(
@@ -61,9 +60,10 @@ class LoginWelcomeWidget extends StatelessWidget {
                       fixedSize: Size(screenWidth * 0.8, 65),
                       padding: EdgeInsets.all(12),
                       textStyle:
-                          TextStyle(fontSize: 24, fontWeight: FontWeight.w400)),
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.w500)),
                   onPressed: () {
-                    print('filled buton pressed');
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => LoginScreen()));
                   },
                   child: Text('Login')),
               SizedBox(
@@ -77,9 +77,9 @@ class LoginWelcomeWidget extends StatelessWidget {
                       fixedSize: Size(screenWidth * 0.8, 65),
                       padding: EdgeInsets.all(12),
                       textStyle:
-                          TextStyle(fontSize: 24, fontWeight: FontWeight.w400)),
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.w500)),
                   onPressed: () {
-                    print('filled buton pressed');
+                    debugPrint('test');
                   },
                   child: Text('Register'))
             ],

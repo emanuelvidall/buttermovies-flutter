@@ -17,7 +17,7 @@ AppBar topBar() {
                       style: TextStyle(
                           fontSize: 28,
                           fontWeight: FontWeight.w800,
-                          color: Color(0xf22b32d1))),
+                          color: Color.fromRGBO(214, 70, 70, 1))),
                   SizedBox(height: 6, width: 0),
                   Text(
                     "Let's explore some movies...",

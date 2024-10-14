@@ -39,7 +39,7 @@ class _HomeScreenState extends State<HomeScreen> {
           children: [
             searchBar(),
             const SizedBox(height: 40),
-            TrendingMoviesWidget(movies: movies),
+            TrendingMoviesWidget(movies: movies.sublist(0, 5)),
             const SizedBox(height: 40),
           ],
         ));
